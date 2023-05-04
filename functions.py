@@ -101,3 +101,11 @@ def client_fullname(name):
         else:
             logging.info(''.join((fnc, f'client {name} not found')))
     return name
+
+
+# testcase
+def time_format(hours):
+    # Convert INT or FLOAT into string 'HHhMMmin'
+    minutes = int(60 * (hours % int(hours)))
+    hours = int(hours)
+    return f'{hours:0>2}ч{minutes:0>2}мин'
