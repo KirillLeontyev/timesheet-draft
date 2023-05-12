@@ -1,9 +1,11 @@
 from vars import *
 import re
+import os
 
 
 def check_interger(num, allowfloat=False):
     # True if variable is interger only
+
     result = False
     if allowfloat:
         if (isinstance(num, int) or isinstance(num, float)) and not (isinstance(num, bool)):
@@ -16,11 +18,13 @@ def check_interger(num, allowfloat=False):
 
 def classname(klass):
     # Returns classname of the class
+
     return f'class {klass.__class__.__name__}: '
 
 
 def check_services_time(time_start, time_end):
     # Check if services time is in a correct interval
+
     result = False
     fnc = 'fnc check_services_time: '
     message = ''
@@ -47,6 +51,7 @@ def check_services_time(time_start, time_end):
 def check_dinner_time(time_start, time_end):
     # Checks if dinner time (13:00-14:00) is between time_start and time_end
     # Returns correct interval for timesheet or False if *args defined with errors
+
     result = False
     fnc = 'fnc check_dinner_time: '
     message = ''
@@ -84,7 +89,9 @@ def check_dinner_time(time_start, time_end):
 # TODO: testcase
 def client_fullname(name):
     # Gets client's full name if in DB
+    # Returns tuple of both full name if found and input name
 
+    oldname = name.capitalize()
     fnc = 'fnc check_dinner_time: '
     clients = (
         'ООО "Токио Роуп Инжиниринг"',
@@ -98,14 +105,44 @@ def client_fullname(name):
         if re.findall(name, client, re.IGNORECASE):
             logging.info(''.join((fnc, f'client {name} found ({client})')))
             name = client
+        elif re.findall(name, 'nan', re.IGNORECASE):
+            logging.info(''.join((fnc, f'empty (NaN) value')))
+            name = ''
+            oldname = name
         else:
             logging.info(''.join((fnc, f'client {name} not found')))
-    return name
+    return name, oldname
 
 
-# testcase
+# TODO: testcase
 def time_format(hours):
     # Convert INT or FLOAT into string 'HHhMMmin'
-    minutes = int(60 * (hours % int(hours)))
+
+    minutes = int(60 * hours)
+    if hours >= 1:
+        minutes = int(60 * (hours % int(hours)))
     hours = int(hours)
-    return f'{hours:0>2}ч{minutes:0>2}мин'
+    return f'{hours}ч{minutes:0>2}мин'
+
+
+# TODO: testcase
+def get_xlsx():
+    # Returns list of XLSX files, excluding temporary (starting with ~)
+
+    files = os.listdir()
+    xls = []
+    for file in files:
+        if re.findall('.xlsx', file):
+            if not re.findall('~', file):
+                xls.append(file)
+    return xls
+
+
+# TODO: testcase
+def check_cell(worksheet, cell):
+    # Checks if target cell contains anything
+
+    if worksheet[cell].value is None:
+        return True
+    else:
+        return False

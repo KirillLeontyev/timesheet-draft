@@ -1,20 +1,17 @@
 import pandas as pd
 from module_date import *
 
-pd.set_option("display.max_rows", None)
-pd.set_option("display.max_columns", None)
-pd.set_option("display.width", None)
-pd.set_option("display.max_colwidth", None)
-
-
 # TODO: testcase
 # TODO: add logging
+
+
 class ComposeJobList:
     def __init__(self, filename='services.xlsx', year=2023, month=4):
         self.services = pd.read_excel(filename)
         self.services.columns = ['date', 'time_start', 'time_end', 'desc', 'client']
         self.period = TargetMonth(year, month)
         self.joblist = []
+        logging.info(''.join((classname(self), 'Object initialized')))
 
     def pd_to_list(self):
         result = []
@@ -23,6 +20,8 @@ class ComposeJobList:
             date = pd.to_datetime(service[0]).date()
             service[0] = date
             result.append(service)
+        if result:
+            logging.debug(''.join((classname(self), 'List of services successfuly converted into list')))
         return result
 
     def compose(self):
@@ -68,11 +67,10 @@ class ComposeJobList:
                         next_index = services[index]
                         try:
                             next_index = services[index + 1]
-                        except IndexError as e:
+                        except IndexError:
                             pass
                             # TODO: add logging
                         if next_index[0] != date or next_index == services[index]:
-                            print('yes', index, desc, client, date)
                             if time_end != work_end:
                                 npa_res = check_dinner_time(float(time_end), float(work_end))
                                 for res_start, res_end in npa_res:
@@ -84,14 +82,4 @@ class ComposeJobList:
                 day_list.append([day[0], DINNER_END, work_end, 'Поиск НПА и практики', ''])
             self.joblist.append([day_list, day[1]])
 
-        # DEBUG entry
-        for day_selected, hours in self.joblist:
-            if day_selected:
-                for job in day_selected:
-                    print(job)
-
-
-        # return self.joblist
-
-    def insert_NPA(self):
-        working_days = self.period.holidays.get_business_days()
+        return self.joblist

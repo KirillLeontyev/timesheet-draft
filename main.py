@@ -1,5 +1,8 @@
+from module_excel import *
+
 if __name__ == '__main__':
-    pass
+    mainApp = CreateExcel()
+    mainApp.start()
 
 # Structure:
 # DONE: - Module log: logging
@@ -7,7 +10,9 @@ if __name__ == '__main__':
 # ADDED: - File with constants 'vars.py'
 # ADDED: - Test functions
 # DONE: - Module: get list of rendered services from file
-# TODO: - Module: Allocation of rendered services by days and time
-# TODO: - Module: Total time counter
-# TODO: - Module: Formation of timesheet, passing it to the Excel module
-# TODO: - Module: Formation of excel file(s)
+# DONE: - Module: Allocation of rendered services by days and time
+# DONE: - Module: Total time counter
+# DONE: - Module: Formation of timesheet, passing it to the Excel module
+# DONE: - Module: Formation of excel file(s)
+# TODO: - Module: main pivot table on all services by all clients
+# TODO: - test cases and logging

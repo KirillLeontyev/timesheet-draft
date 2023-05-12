@@ -32,6 +32,7 @@ class BaseClass:
                 message = 'Error in type/value of month, current is used'
                 logging.warning(''.join((classname(self), message)))
                 self.month = self.today.month
+        logging.info(''.join((classname(self), 'Object initialized')))
 
     def _check_year_or_month(self, num=0, numtype='year'):
         # Value check of input 'year' or 'month'
